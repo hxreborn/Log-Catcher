@@ -4,21 +4,25 @@
 [![KernelSU](docs/assets/badges/kernelsu.svg)](https://kernelsu.org)
 [![APatch](docs/assets/badges/apatch.svg)](https://apatch.dev)
 
-Captures boot logs (logcat + kernel messages) during system startup and packages them as `bootlog-*.tar.gz` in `/sdcard/Download/`.
+Captures boot logs (logcat + kernel messages) during startup and stores `bootlog-*.tar.gz` archives at a configurable export path (`/sdcard/Download/` by default).
 
 ## Features
 
 - Captures logcat and kernel messages from early boot
-- Packages logs as timestamped tarballs after unlock
-- Configurable buffers, export path, max files, and auto-cleanup
+- Archives logs as timestamped tarballs after unlock
+- Configurable buffers, export path, max files, and cleanup rules
 - Optional persistent logging past boot
 - KernelSU/APatch WebUI for on-device log management
 
+## Supported Root Managers
+
+Magisk (manual config only), KernelSU, APatch.
+
 ## Configuration
 
-On KernelSU/APatch, open the module's WebUI to configure export path, cleanup rules, persistent logging, and log buffers.
+On KernelSU/APatch, use the module WebUI.
 
-On Magisk (no WebUI), edit `/data/local/logcatcher/config`:
+On Magisk, edit `/data/local/logcatcher/config`:
 
 ```sh
 EXPORT_PATH=/sdcard/Download
@@ -30,5 +34,5 @@ PERSISTENT=false
 
 ## Credits
 
-- [MlgmXyysd](https://github.com/MlgmXyysd) (Jaida Wu) - original [Log-Catcher](https://github.com/MlgmXyysd/Log-Catcher) project
-- [Howard20181](https://github.com/Howard20181) (Howard Wu) - updated fork with additional features
+- [Jaida Wu](https://github.com/MlgmXyysd) - original [Log-Catcher](https://github.com/MlgmXyysd/Log-Catcher) project
+- [Howard Wu](https://github.com/Howard20181) - updated fork with additional features
