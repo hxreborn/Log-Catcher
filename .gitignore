@@ -7,4 +7,3 @@ webroot/
 # IDE / tooling
 .directory
 .idea/
-package-lock.json
