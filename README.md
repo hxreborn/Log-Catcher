@@ -1,12 +1,18 @@
-# Log-Catcher
+# Log Catcher
 
-Capture the boot logs to /cache/bootlog or /data/local/bootlog if /cache does not exist.
+Magisk/KernelSU module that captures logcat and kernel messages during boot, saved as timestamped `bootlog-*.tar.gz` files.
 
-After unlocking, package them to /sdcard/Download/bootlog-**.tar.gz.
+## Compatibility
 
-This module can help you save startup logs.
+| Root manager | Log capture | WebUI |
+|---|---|---|
+| KernelSU | Yes | Yes |
+| APatch | Yes | Yes |
+| Magisk | Yes | No |
 
-If you don't want to stop log catching after unlocking, create a file named `/data/local/logcatcher/boot.lcs`
+## Persistent Logging
+
+By default, capture stops after boot completes. To keep logging, create `/data/local/logcatcher/boot.lcs`. Logs will be saved on next boot instead.
 
 ## Credits
 
