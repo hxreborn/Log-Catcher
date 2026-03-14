@@ -64,6 +64,11 @@
           #7F7F7F1E 0 .0625rem .5rem 0;
 }
 
+[unresolved] {
+  opacity: 0;
+  overflow: hidden;
+}
+
 /* ===== Base ===== */
 
 body {
@@ -124,29 +129,14 @@ header > span {
   }
 }
 
-/* ===== Progress ===== */
-
-#refresh-progress {
-  position: sticky;
-  top: 4rem;
-  z-index: 1;
-  margin: 0 calc(-1 * var(--main)) !important;
-  width: calc(100% + 2 * var(--main));
-}
-
 /* ===== Settings ===== */
 
 .section-title {
   padding: 0;
   margin: 0;
-  list-style: none;
-  cursor: pointer;
-  user-select: none;
   font: var(--title-m);
   color: var(--primary);
 }
-
-.section-title::-webkit-details-marker { display: none; }
 
 .settings-group {
   background: var(--surface-container-low);
@@ -214,137 +204,6 @@ header > span {
   padding: 0.75rem 1rem;
   border-top: 1px solid var(--outline-variant);
   flex-direction: row-reverse;
-}
-
-/* ===== Archives header ===== */
-
-.archives-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.25rem 1rem;
-}
-
-.archives-header .section-title {
-  cursor: default;
-  flex: 0;
-  white-space: nowrap;
-}
-
-.archives-header #file-count {
-  font: var(--body-m);
-  color: var(--on-surface-variant);
-  flex: 1;
-}
-
-.select-all-label {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 0;
-  margin: -0.5rem 0;
-  cursor: pointer;
-}
-
-.select-all-label md-checkbox,
-.file-item md-checkbox {
-  flex-shrink: 0;
-  --md-checkbox-container-size: 18px;
-  --md-checkbox-state-layer-size: 0px;
-  overflow: hidden;
-}
-
-/* ===== File list ===== */
-
-.file-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  list-style: none;
-  padding: 0;
-  margin: 0 !important;
-}
-
-.file-item {
-  background: var(--surface-container-low);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.file-item label {
-  -webkit-tap-highlight-color: transparent;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  min-height: 3rem;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.15s ease;
-}
-
-.file-item label:active {
-  opacity: 0.75;
-}
-
-.file-item.selected {
-  background: color-mix(in oklch, var(--primary) 12%, var(--surface-container-low));
-}
-
-.file-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  flex: 1;
-}
-
-.file-name {
-  font: var(--body-l);
-  color: var(--on-surface);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.file-meta {
-  font: var(--body-m);
-  color: var(--on-surface-variant);
-}
-
-/* ===== Selection bar ===== */
-
-.selection-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  background: var(--surface-container);
-  padding: 0.75rem var(--main);
-  padding-bottom: calc(0.75rem + var(--window-inset-bottom, 0px));
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border-top: 1px solid var(--outline-variant);
-}
-
-.selection-bar > span {
-  font: var(--title-s);
-  color: var(--on-surface);
-  flex: 1;
-}
-
-/* ===== Empty state ===== */
-
-.empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 1rem;
-  color: var(--on-surface-variant);
-  text-align: center;
-  gap: 1rem;
 }
 
 /* ===== Help dialog ===== */

@@ -1,7 +1,8 @@
 import '@material/web/ripple/ripple.js';
 import { exec } from './lib/kernelsu';
-import { SAFE_PATH } from './files';
 import { $, escapeHtml } from './ui';
+
+const SAFE_PATH = /^\/[a-zA-Z0-9_/.-]+$/;
 import type { MdDialog } from '@material/web/dialog/dialog.js';
 
 const ROOT = '/sdcard';

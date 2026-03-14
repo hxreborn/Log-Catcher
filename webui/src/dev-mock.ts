@@ -1,21 +1,4 @@
-const LOG_DIR = '/sdcard/Download';
 const MODULE_VERSION = 'v2.1-dev';
-
-const generateFakeEntries = (count: number): string => {
-    const now = Date.now();
-    const lines: string[] = [];
-    for (let i = 0; i < count; i++) {
-        const age = i * (3 + Math.random() * 20) * 3600_000;
-        const d = new Date(now - age);
-        const pad = (n: number, w = 2) => String(n).padStart(w, '0');
-        const ts = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
-        const size = 800 + Math.floor(Math.random() * 120_000);
-        lines.push(`${size} ${LOG_DIR}/bootlog-${ts}.tar.gz`);
-    }
-    return lines.join('\n');
-};
-
-const FAKE_FILES = generateFakeEntries(6);
 
 const MOCK_FS: Record<string, string[]> = {
     '/sdcard': ['Android', 'DCIM', 'Documents', 'Download', 'Music', 'Pictures'],
@@ -36,10 +19,7 @@ const respond = (cmd: string): [number, string, string] => {
         const match = cmd.match(/cd "([^"]+)"/);
         return [0, mockDirListing(match?.[1] ?? '/sdcard'), ''];
     }
-    if (cmd.startsWith('stat -c')) return [0, FAKE_FILES, ''];
     if (cmd.startsWith('grep "^version="')) return [0, MODULE_VERSION, ''];
-    if (cmd.startsWith('rm ')) return [0, '', ''];
-    if (cmd.startsWith('am start')) return [0, '', ''];
     if (cmd.includes('ksud module config')) return [0, '', ''];
     if (cmd.includes('/data/local/logcatcher')) return [0, '', ''];
     return [1, '', `mock: unhandled command: ${cmd}`];

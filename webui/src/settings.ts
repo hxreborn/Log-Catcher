@@ -81,6 +81,13 @@ const writeConfigFile = async (settings: Settings): Promise<boolean> => {
     return errno === 0;
 };
 
+const MODULE_PROP = `/data/adb/modules/${MODULE_ID}/module.prop`;
+
+export const getModuleVersion = async (): Promise<string> => {
+    const { errno, stdout } = await exec(`grep "^version=" ${MODULE_PROP} | cut -d= -f2`);
+    return errno === 0 && stdout.trim() ? stdout.trim() : 'v?';
+};
+
 export const saveSettings = async (settings: Settings): Promise<boolean> => {
     const entries: [ConfigKey, string][] = [
         ['export_path', settings.exportPath],

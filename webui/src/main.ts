@@ -1,16 +1,5 @@
-import {
-    deleteAll,
-    deleteFile,
-    getModuleVersion,
-    type LogFile,
-    listFiles,
-    setLogDir,
-    shareFiles,
-} from './files';
 import '@material/web/button/filled-button.js';
-import '@material/web/button/filled-tonal-button.js';
 import '@material/web/button/text-button.js';
-import '@material/web/checkbox/checkbox.js';
 import '@material/web/chips/chip-set.js';
 import '@material/web/chips/filter-chip.js';
 import '@material/web/dialog/dialog.js';
@@ -18,31 +7,16 @@ import '@material/web/iconbutton/icon-button.js';
 import '@material/web/progress/linear-progress.js';
 import '@material/web/switch/switch.js';
 import '@material/web/textfield/outlined-text-field.js';
-import type { MdCheckbox } from '@material/web/checkbox/checkbox.js';
 import type { MdFilterChip } from '@material/web/chips/filter-chip.js';
 import type { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field.js';
 import type { MdSwitch } from '@material/web/switch/switch.js';
 import { showFolderPicker } from './folder-picker';
 import { toast } from './lib/kernelsu';
-import { loadSettings, type Settings, saveSettings } from './settings';
-import {
-    $,
-    hideRefreshProgress,
-    setVersion,
-    setupSectionHelp,
-    showConfirm,
-    showEmpty,
-    showFiles,
-    showHelp,
-    showRefreshProgress,
-    updateFileCount,
-    updateSelectionBar,
-} from './ui';
+import { loadSettings, type Settings, saveSettings, getModuleVersion } from './settings';
+import { $, setVersion, setupSectionHelp, showHelp } from './ui';
 
-let currentFiles: LogFile[] = [];
 let currentSettings: Settings;
 let settingsSnapshot: string;
-const selected = new Set<number>();
 
 const populateSettings = (settings: Settings): void => {
     $<MdOutlinedTextField>('input-export-path').value = settings.exportPath;
@@ -80,103 +54,6 @@ const checkDirty = (): void => {
     $('settings-save-bar').hidden = !dirty;
 };
 
-const updateSelectAll = (): void => {
-    const selectAll = $<MdCheckbox>('select-all');
-    const total = currentFiles.length;
-    const count = selected.size;
-    selectAll.checked = count === total && total > 0;
-    selectAll.indeterminate = count > 0 && count < total;
-};
-
-const syncSelection = (): void => {
-    const items = $('file-list').querySelectorAll<HTMLElement>('.file-item');
-    items.forEach((item) => {
-        const index = Number(item.dataset.index);
-        const checkbox = item.querySelector('md-checkbox') as MdCheckbox;
-        const isSelected = selected.has(index);
-        checkbox.checked = isSelected;
-        item.classList.toggle('selected', isSelected);
-    });
-    updateSelectAll();
-    updateSelectionBar(selected.size);
-};
-
-const refresh = async (silent = false): Promise<void> => {
-    if (!silent) showRefreshProgress();
-    selected.clear();
-    updateSelectionBar(0);
-    try {
-        currentFiles = await listFiles();
-        if (currentFiles.length === 0) {
-            showEmpty();
-        } else {
-            showFiles(currentFiles);
-            updateFileCount(currentFiles.length);
-            updateSelectAll();
-        }
-    } catch {
-        toast('Failed to load files');
-        showEmpty();
-    } finally {
-        hideRefreshProgress();
-    }
-};
-
-const handleShare = async (): Promise<void> => {
-    if (selected.size === 0) return;
-    const filesToShare = [...selected].map((i) => currentFiles[i]);
-    const ok = await shareFiles(filesToShare);
-    if (!ok) toast('Share failed');
-};
-
-const handleDeleteSelected = async (): Promise<void> => {
-    const count = selected.size;
-    if (count === 0) return;
-
-    const msg =
-        count === currentFiles.length
-            ? 'Delete all bootlog files? This cannot be undone.'
-            : `Delete ${count} file${count !== 1 ? 's' : ''}? This cannot be undone.`;
-
-    if (!(await showConfirm(`Delete ${count} file${count !== 1 ? 's' : ''}?`, msg))) return;
-
-    let deleted: number;
-    if (count === currentFiles.length) {
-        deleted = await deleteAll(count);
-    } else {
-        const filesToDelete = [...selected].map((i) => currentFiles[i]);
-        const results = await Promise.all(filesToDelete.map(deleteFile));
-        deleted = results.filter(Boolean).length;
-    }
-
-    toast(deleted > 0 ? `Deleted ${deleted} file${deleted !== 1 ? 's' : ''}` : 'Delete failed');
-    await refresh();
-};
-
-const handleSelectAll = (): void => {
-    const selectAll = $<MdCheckbox>('select-all');
-    selected.clear();
-    if (selectAll.checked) {
-        for (let i = 0; i < currentFiles.length; i++) selected.add(i);
-    }
-    syncSelection();
-};
-
-const handleFileToggle = (e: Event): void => {
-    const checkbox = (e.target as HTMLElement).closest('md-checkbox') as MdCheckbox | null;
-    if (!checkbox) return;
-    const item = checkbox.closest<HTMLElement>('[data-index]');
-    if (!item) return;
-    const index = Number(item.dataset.index);
-
-    if (checkbox.checked) selected.add(index);
-    else selected.delete(index);
-
-    item.classList.toggle('selected', checkbox.checked);
-    updateSelectAll();
-    updateSelectionBar(selected.size);
-};
-
 const init = async (): Promise<void> => {
     if (import.meta.env.DEV && !globalThis.ksu) {
         const { installMockBridge, installMockColors } = await import('./dev-mock');
@@ -185,7 +62,6 @@ const init = async (): Promise<void> => {
     }
 
     currentSettings = await loadSettings();
-    setLogDir(currentSettings.exportPath);
     setVersion(await getModuleVersion());
     populateSettings(currentSettings);
 
@@ -210,10 +86,8 @@ const init = async (): Promise<void> => {
         const ok = await saveSettings(newSettings);
         if (ok) {
             currentSettings = newSettings;
-            setLogDir(newSettings.exportPath);
             populateSettings(newSettings);
             toast('Settings saved');
-            await refresh(true);
         } else {
             toast('Failed to save settings');
         }
@@ -221,12 +95,7 @@ const init = async (): Promise<void> => {
 
     $('btn-discard-settings').onclick = () => populateSettings(currentSettings);
 
-    $('btn-share').onclick = handleShare;
-    $('btn-delete-selected').onclick = handleDeleteSelected;
-    $('select-all').addEventListener('change', handleSelectAll);
-    $('file-list').addEventListener('change', handleFileToggle);
-
-    await refresh();
+    $('settings-section').removeAttribute('unresolved');
 };
 
 document.addEventListener('DOMContentLoaded', init);
