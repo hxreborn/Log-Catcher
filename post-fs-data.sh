@@ -15,6 +15,16 @@ else
     mkdir -p "$LOG_PATH"
 fi
 
+if [ "${CAPTURE_RAMOOPS:-true}" != "false" ] && [ -d /sys/fs/pstore ]; then
+    for src in /sys/fs/pstore/console-ramoops* \
+               /sys/fs/pstore/dmesg-ramoops* \
+               /sys/fs/pstore/pmsg-ramoops*; do
+        [ -f "$src" ] || continue
+        name=$(basename "$src")
+        cat "$src" >"$LOG_PATH/$name.log" 2>/dev/null
+    done
+fi
+
 KMSG_PID_FILE=$LOG_PATH/kmsg.pid
 rm -f "$KMSG_PID_FILE"
 KERNEL_LOG_FILE=$LOG_PATH/kernel.log

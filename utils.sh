@@ -8,6 +8,7 @@ load_config() {
     PRUNE_DAYS=7
     BUFFERS=main,system,crash
     PERSISTENT=false
+    CAPTURE_RAMOOPS=true
     [ -f "$CONFIG_DIR/config" ] && . "$CONFIG_DIR/config"
 }
 get_prop() {

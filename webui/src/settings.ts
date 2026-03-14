@@ -6,6 +6,7 @@ export interface Settings {
     pruneDays: number;
     buffers: string[];
     persistentLogging: boolean;
+    captureRamoops: boolean;
 }
 
 const MODULE_ID = 'hxr_logcat';
@@ -19,9 +20,10 @@ export const DEFAULT_SETTINGS: Settings = {
     pruneDays: 7,
     buffers: ['main', 'system', 'crash'],
     persistentLogging: false,
+    captureRamoops: true,
 };
 
-const CONFIG_KEYS = ['export_path', 'max_logs', 'prune_days', 'buffers', 'persistent'] as const;
+const CONFIG_KEYS = ['export_path', 'max_logs', 'prune_days', 'buffers', 'persistent', 'capture_ramoops'] as const;
 
 type ConfigKey = (typeof CONFIG_KEYS)[number];
 
@@ -58,6 +60,10 @@ export const loadSettings = async (): Promise<Settings> => {
             raw.persistent !== undefined
                 ? raw.persistent === 'true'
                 : DEFAULT_SETTINGS.persistentLogging,
+        captureRamoops:
+            raw.capture_ramoops !== undefined
+                ? raw.capture_ramoops === 'true'
+                : DEFAULT_SETTINGS.captureRamoops,
     };
 };
 
@@ -70,6 +76,7 @@ const writeConfigFile = async (settings: Settings): Promise<boolean> => {
         `PRUNE_DAYS=${settings.pruneDays}`,
         `BUFFERS=${settings.buffers.join(',')}`,
         `PERSISTENT=${settings.persistentLogging}`,
+        `CAPTURE_RAMOOPS=${settings.captureRamoops}`,
     ].join('\n');
 
     const lcsCmd = settings.persistentLogging
@@ -95,6 +102,7 @@ export const saveSettings = async (settings: Settings): Promise<boolean> => {
         ['prune_days', String(settings.pruneDays)],
         ['buffers', settings.buffers.join(',')],
         ['persistent', String(settings.persistentLogging)],
+        ['capture_ramoops', String(settings.captureRamoops)],
     ];
 
     const ksudCmd = entries.map(([key, val]) => ksud(`set ${key} ${shellQuote(val)}`)).join(' && ');
