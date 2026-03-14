@@ -1,11 +1,20 @@
 # shellcheck shell=busybox
 LOG_PATH=/cache/bootlog
 [ -d /cache ] || LOG_PATH=/data/local/bootlog
+CONFIG_DIR=/data/local/logcatcher
+load_config() {
+    EXPORT_PATH=/sdcard/Download
+    MAX_LOGS=10
+    PRUNE_DAYS=7
+    BUFFERS=main,system,crash
+    PERSISTENT=false
+    [ -f "$CONFIG_DIR/config" ] && . "$CONFIG_DIR/config"
+}
 get_prop() {
     grep -m 1 "^$2=" "$1" | cut -d= -f2
 }
 check_write() {
-    local TEST_DIR=/sdcard/Download
+    local TEST_DIR="${1:-/sdcard/Download}"
     [ -d "$TEST_DIR" ] || mkdir -p "$TEST_DIR"
     local TEST_FILE="$TEST_DIR/.PERMISSION_TEST"
     touch "$TEST_FILE"

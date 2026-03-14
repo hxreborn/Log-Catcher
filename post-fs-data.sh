@@ -2,6 +2,7 @@
 # shellcheck disable=SC2117
 MODDIR=${0%/*}
 . "$MODDIR/utils.sh"
+load_config
 if [ -d "$LOG_PATH" ]; then
     [ -d "$LOG_PATH/old" ] || mkdir -p "$LOG_PATH/old"
     for f in "$LOG_PATH"/*.log; do
@@ -35,5 +36,5 @@ SU_VERSION=$(su -v)
     echo "SELinux: $(getenforce)"
 } >>"$LOG_FILE"
 LOGCAT_PID_FILE=$LOG_PATH/logcat.pid
-logcat -b main,system,crash -f "$LOG_FILE" &
+logcat -b "$BUFFERS" -f "$LOG_FILE" &
 echo $! >"$LOGCAT_PID_FILE"
