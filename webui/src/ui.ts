@@ -39,7 +39,7 @@ export const showFiles = (files: ReadonlyArray<LogFile>): void => {
             (file, i) => html`
                 <li class="file-item" data-index="${i}">
                     <label>
-                        <md-checkbox></md-checkbox>
+                        <md-checkbox touch-target="none"></md-checkbox>
                         <div class="file-info">
                             <span class="file-name">${file.filename}</span>
                             <span class="file-meta">${file.sizeFormatted} · ${format(file.date, 'MMM d, HH:mm')}</span>

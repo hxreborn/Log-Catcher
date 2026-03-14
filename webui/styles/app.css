@@ -249,6 +249,8 @@ header > span {
 .file-item md-checkbox {
   flex-shrink: 0;
   --md-checkbox-container-size: 18px;
+  --md-checkbox-state-layer-size: 0px;
+  overflow: hidden;
 }
 
 /* ===== File list ===== */
