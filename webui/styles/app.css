@@ -69,6 +69,44 @@
   overflow: hidden;
 }
 
+#settings-section {
+  transition: opacity 0.25s ease;
+}
+
+/* ===== Splash / loading overlay ===== */
+
+#splash {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background: var(--surface);
+  z-index: 100;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  padding-top: var(--window-inset-top, 0px);
+  padding-bottom: var(--window-inset-bottom, 0px);
+}
+
+@keyframes splash-enter {
+  from { opacity: 0; transform: scale(0.82); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+#splash md-circular-progress {
+  --md-circular-progress-size: 48px;
+  --md-circular-progress-active-indicator-color: var(--primary);
+  animation: splash-enter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+#splash.done {
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+}
+
 /* ===== Base ===== */
 
 body {
@@ -91,6 +129,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 2;
+  transition: opacity 0.25s ease;
   background-color: var(--surface-container);
   color: var(--on-surface);
   height: 4rem;
@@ -148,10 +187,10 @@ header > span {
   gap: 0.75rem;
 }
 
-.settings-group-header {
+.section-heading {
   display: flex;
-  justify-content: flex-end;
-  margin: -0.5rem -0.5rem -0.25rem;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .settings-group md-outlined-text-field {
@@ -171,6 +210,7 @@ header > span {
 
 .switches {
   display: flex;
+  flex-direction: column;
 }
 
 .settings-group .switches label {

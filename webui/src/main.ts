@@ -4,7 +4,7 @@ import '@material/web/chips/chip-set.js';
 import '@material/web/chips/filter-chip.js';
 import '@material/web/dialog/dialog.js';
 import '@material/web/iconbutton/icon-button.js';
-import '@material/web/progress/linear-progress.js';
+import '@material/web/progress/circular-progress.js';
 import '@material/web/switch/switch.js';
 import '@material/web/textfield/outlined-text-field.js';
 import type { MdFilterChip } from '@material/web/chips/filter-chip.js';
@@ -23,6 +23,7 @@ const populateSettings = (settings: Settings): void => {
     $<MdOutlinedTextField>('input-max-logs').value = String(settings.maxLogs);
     $<MdOutlinedTextField>('input-prune-days').value = String(settings.pruneDays);
     $<MdSwitch>('toggle-persistent').selected = settings.persistentLogging;
+    $<MdSwitch>('toggle-ramoops').selected = settings.captureRamoops;
 
     for (const chip of $('chips-buffers').querySelectorAll<MdFilterChip>('md-filter-chip')) {
         chip.selected = settings.buffers.includes(chip.label);
@@ -45,6 +46,7 @@ const readSettingsFromForm = (): Settings => {
             Number($<MdOutlinedTextField>('input-prune-days').value) || currentSettings.pruneDays,
         buffers,
         persistentLogging: $<MdSwitch>('toggle-persistent').selected,
+        captureRamoops: $<MdSwitch>('toggle-ramoops').selected,
     };
 };
 
@@ -60,10 +62,6 @@ const init = async (): Promise<void> => {
         installMockBridge();
         installMockColors();
     }
-
-    currentSettings = await loadSettings();
-    setVersion(await getModuleVersion());
-    populateSettings(currentSettings);
 
     $('btn-help').onclick = showHelp;
     setupSectionHelp();
@@ -95,7 +93,23 @@ const init = async (): Promise<void> => {
 
     $('btn-discard-settings').onclick = () => populateSettings(currentSettings);
 
-    $('settings-section').removeAttribute('unresolved');
+    const [settings, version] = await Promise.all([
+        loadSettings(),
+        getModuleVersion(),
+    ]);
+
+    currentSettings = settings;
+    setVersion(version);
+    populateSettings(settings);
+
+    const splash = $('splash');
+    splash.classList.add('done');
+    splash.addEventListener('transitionend', (e) => {
+        if (e.propertyName !== 'opacity') return;
+        splash.remove();
+        document.querySelector('header')!.removeAttribute('unresolved');
+        $('settings-section').removeAttribute('unresolved');
+    });
 };
 
 document.addEventListener('DOMContentLoaded', init);

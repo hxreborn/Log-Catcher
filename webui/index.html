@@ -9,7 +9,11 @@
   <link rel="stylesheet" href="./styles/app.css">
 </head>
 <body>
-  <header>
+  <div id="splash" aria-hidden="true">
+    <md-circular-progress indeterminate></md-circular-progress>
+  </div>
+
+  <header unresolved>
     <h1>Log Catcher</h1>
     <span id="version"></span>
     <md-icon-button id="btn-help" aria-label="Help">
@@ -21,15 +25,15 @@
 
   <main>
     <section id="settings-section" unresolved>
-      <h2 class="section-title">Settings</h2>
+      <div class="section-heading">
+        <h2 class="section-title">Settings</h2>
+        <md-icon-button class="section-help-btn" data-help="settings" aria-label="Settings help">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+          </svg>
+        </md-icon-button>
+      </div>
       <div class="settings-group">
-        <div class="settings-group-header">
-          <md-icon-button class="section-help-btn" data-help="settings" aria-label="Settings help">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
-            </svg>
-          </md-icon-button>
-        </div>
         <div class="path-field">
           <md-outlined-text-field label="Export path" id="input-export-path" required></md-outlined-text-field>
           <md-icon-button id="btn-browse-path" aria-label="Browse folders">
@@ -45,6 +49,10 @@
           <label>
             Persistent logging
             <md-switch id="toggle-persistent"></md-switch>
+          </label>
+          <label>
+            Capture ramoops
+            <md-switch id="toggle-ramoops"></md-switch>
           </label>
         </div>
 
@@ -79,7 +87,7 @@
     <div slot="content">
       <p>Captures logcat and kernel messages during boot, archived as timestamped <code>.tar.gz</code> files.</p>
       <p>Original by <a href="https://github.com/MlgmXyysd/Log-Catcher" target="_blank">MlgmXyysd</a> / <a href="https://github.com/Howard20181/Log-Catcher" target="_blank">Howard20181</a><br>
-      WebUI by <a href="https://github.com/hxreborn/Log-Catcher" target="_blank">hxreborn</a></p>
+      Fork by <a href="https://github.com/hxreborn/Log-Catcher" target="_blank">hxreborn</a></p>
     </div>
     <div slot="actions">
       <md-filled-button id="help-close">OK</md-filled-button>
@@ -93,11 +101,13 @@
         <dt>Export path</dt>
         <dd>Directory where log tarballs are saved after each boot.</dd>
         <dt>Max files</dt>
-        <dd>When exceeded, the oldest log files are deleted at boot time. For example, with a limit of 5, rebooting with 5 existing files deletes the oldest before saving the new one.</dd>
+        <dd>Keeps only the N most recent logs. Older ones are deleted on boot when the limit is exceeded.</dd>
         <dt>Auto-delete (days)</dt>
         <dd>Log files older than this are automatically removed on boot. Set to 0 to keep files indefinitely.</dd>
         <dt>Persistent logging</dt>
         <dd>By default, log capture stops after the first unlock and logs are packaged immediately. Enable this to keep capturing in the background. Logs will be packaged on the next reboot instead.</dd>
+        <dt>Capture ramoops</dt>
+        <dd>Copies the previous boot's kernel crash log from pstore into the archive, if present. Useful for diagnosing boot loops and kernel panics. Has no effect on devices without pstore support.</dd>
       </dl>
     </div>
     <div slot="actions">
@@ -124,8 +134,8 @@
         <dt>Events</dt>
         <dd>Structured system events like battery stats, app usage, and thermal data. Mostly useful for advanced diagnostics.</dd>
         <dt>Kernel</dt>
-        <dd>Kernel ring buffer (dmesg). Captures driver messages, hardware init, and low-level errors. Useful for diagnosing kernel panics, boot loops, and hardware failures.
-          <p class="help-note">Kernel messages are already captured separately via /proc/kmsg. Enabling this adds them to the logcat stream for a unified timeline.</p>
+        <dd>Kernel ring buffer (dmesg). Driver messages, hardware init, and low-level kernel errors. Most useful for boot loops, kernel panics, and hardware failures.
+          <p class="help-note">This module always captures kernel messages via /proc/kmsg into a separate kernel.log, regardless of this setting. Enabling this buffer attempts to also include kernel messages in the logcat timeline via /dev/kmsg, but many devices and custom kernels don't expose that interface, so it may produce no output.</p>
         </dd>
       </dl>
     </div>
