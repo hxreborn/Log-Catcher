@@ -17,7 +17,25 @@ const generateFakeEntries = (count: number): string => {
 
 const FAKE_FILES = generateFakeEntries(6);
 
+const MOCK_FS: Record<string, string[]> = {
+    '/sdcard': ['Android', 'DCIM', 'Documents', 'Download', 'Music', 'Pictures'],
+    '/sdcard/Download': ['bootlogs', 'Telegram'],
+    '/sdcard/Documents': [],
+    '/sdcard/DCIM': ['Camera'],
+    '/sdcard/Android': ['data', 'media', 'obb'],
+};
+
+const mockDirListing = (dir: string): string => {
+    const children = MOCK_FS[dir];
+    if (!children || children.length === 0) return '';
+    return children.join('\n');
+};
+
 const respond = (cmd: string): [number, string, string] => {
+    if (cmd.startsWith('cd "')) {
+        const match = cmd.match(/cd "([^"]+)"/);
+        return [0, mockDirListing(match?.[1] ?? '/sdcard'), ''];
+    }
     if (cmd.startsWith('stat -c')) return [0, FAKE_FILES, ''];
     if (cmd.startsWith('grep "^version="')) return [0, MODULE_VERSION, ''];
     if (cmd.startsWith('rm ')) return [0, '', ''];

@@ -169,6 +169,16 @@ header > span {
   width: 100%;
 }
 
+.path-field {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.path-field md-outlined-text-field {
+  flex: 1;
+}
+
 .switches {
   display: flex;
 }
@@ -418,6 +428,103 @@ md-dialog [slot="content"] p {
   font: var(--label-m);
   font-style: italic;
   margin-top: 0.25rem;
+}
+
+/* ===== Folder picker ===== */
+
+#folder-picker-dialog {
+  --md-dialog-container-color: var(--md-sys-color-surface-container-high);
+  width: calc(100% - 32px);
+  max-height: 80vh;
+}
+
+.fp-header {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.fp-breadcrumbs {
+  flex: 1;
+  font: var(--body-l);
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.fp-breadcrumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.fp-crumb {
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+}
+
+.fp-crumb:last-child {
+  color: var(--on-surface);
+}
+
+.fp-crumb:active {
+  background: color-mix(in oklch, var(--primary) 12%, transparent);
+}
+
+.fp-sep {
+  color: var(--on-surface-variant);
+  padding: 0 2px;
+}
+
+.fp-file-list {
+  overflow-y: auto;
+  padding: 0.5rem 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.fp-file-list.switching {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.fp-item {
+  display: flex;
+  align-items: center;
+  padding: 0.625rem;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  color: var(--on-surface);
+}
+
+.fp-item-icon {
+  display: flex;
+  margin-right: 0.625rem;
+  color: var(--on-surface-variant);
+}
+
+.fp-item-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: var(--body-l);
+}
+
+.fp-empty {
+  font: var(--body-m);
+  color: var(--on-surface-variant);
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.fp-error {
+  font: var(--body-m);
+  color: var(--error);
+  text-align: center;
+  padding: 1rem;
 }
 
 [hidden] {

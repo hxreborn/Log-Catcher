@@ -22,6 +22,7 @@ import type { MdCheckbox } from '@material/web/checkbox/checkbox.js';
 import type { MdFilterChip } from '@material/web/chips/filter-chip.js';
 import type { MdOutlinedTextField } from '@material/web/textfield/outlined-text-field.js';
 import type { MdSwitch } from '@material/web/switch/switch.js';
+import { showFolderPicker } from './folder-picker';
 import { toast } from './lib/kernelsu';
 import { loadSettings, type Settings, saveSettings } from './settings';
 import {
@@ -190,6 +191,15 @@ const init = async (): Promise<void> => {
 
     $('btn-help').onclick = showHelp;
     setupSectionHelp();
+
+    $('btn-browse-path').onclick = async () => {
+        const current = $<MdOutlinedTextField>('input-export-path').value.trim() || '/sdcard';
+        const picked = await showFolderPicker(current);
+        if (picked) {
+            $<MdOutlinedTextField>('input-export-path').value = picked;
+            checkDirty();
+        }
+    };
 
     $('settings-section').addEventListener('input', checkDirty);
     $('settings-section').addEventListener('change', checkDirty);

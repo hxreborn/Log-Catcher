@@ -12,7 +12,7 @@ export interface LogFile {
 }
 
 let logDir = '/sdcard/Download';
-const SAFE_PATH = /^\/[a-zA-Z0-9_/.-]+$/;
+export const SAFE_PATH = /^\/[a-zA-Z0-9_/.-]+$/;
 const logPattern = () => `"${logDir}"/bootlog-*.tar.gz`;
 const LOG_TIMESTAMP = /^bootlog-(\d{8})-(\d{6})\.tar\.gz$/;
 

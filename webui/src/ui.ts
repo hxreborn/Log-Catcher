@@ -12,7 +12,8 @@ const HTML_ESCAPES: Record<string, string> = {
     "'": '&#39;',
 };
 
-const escapeHtml = (str: string): string => str.replaceAll(/[&<>"']/g, (c) => HTML_ESCAPES[c]);
+export const escapeHtml = (str: string): string =>
+    str.replaceAll(/[&<>"']/g, (c) => HTML_ESCAPES[c]);
 
 const html = (strings: TemplateStringsArray, ...values: unknown[]): string =>
     strings.reduce(
