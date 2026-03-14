@@ -1,6 +1,6 @@
 id=hxr_logcat
 name=Log Catcher
-version=v23
-versionCode=23
+version=v23.1
+versionCode=2301
 author=MlgmXyysd, Howard20181, hxreborn
 description=Captures logcat and kernel messages during boot, archived as timestamped tarballs.
