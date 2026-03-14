@@ -1,0 +1,25 @@
+{
+  "name": "log-catcher-webui",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node node_modules/typescript/bin/tsc --noEmit && node node_modules/vite/bin/vite.js build",
+    "check": "node node_modules/typescript/bin/tsc --noEmit",
+    "lint": "biome check src/",
+    "lint:fix": "biome check --write src/",
+    "format": "biome format --write src/",
+    "preview": "node node_modules/vite/bin/vite.js preview"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
+    "@types/node": "^24.3.0",
+    "typescript": "~5.9",
+    "vite": "~8.0"
+  },
+  "dependencies": {
+    "@material/web": "^2.4.1",
+    "date-fns": "^4.1.0",
+    "pretty-bytes": "^7.1.0"
+  }
+}

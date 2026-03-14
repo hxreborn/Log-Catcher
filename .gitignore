@@ -1,3 +1,10 @@
 __MACOSX
 .DS_Store
 *.zip
+webui/node_modules/
+webroot/
+
+# IDE / tooling
+.directory
+.idea/
+package-lock.json
