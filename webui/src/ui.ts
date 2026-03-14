@@ -93,6 +93,23 @@ export const showHelp = (): void => {
     dialog.show();
 };
 
+export const setupSectionHelp = (): void => {
+    for (const btn of document.querySelectorAll<HTMLElement>('.section-help-btn')) {
+        const dialogId = `${btn.dataset.help}-help`;
+        const dialog = $<MdDialog>(dialogId);
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dialog.show();
+        });
+    }
+    for (const btn of document.querySelectorAll<HTMLElement>('.help-dialog-close')) {
+        btn.addEventListener('click', () => {
+            (btn.closest('md-dialog') as MdDialog).close();
+        });
+    }
+};
+
 export const setVersion = (version: string): void => {
     $('version').textContent = version;
     $('help-version').textContent = version;

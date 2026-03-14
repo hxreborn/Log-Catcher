@@ -25,6 +25,13 @@
     <details id="settings-section" open>
       <summary class="section-title">Settings</summary>
       <div class="settings-group">
+        <div class="settings-group-header">
+          <md-icon-button class="section-help-btn" data-help="settings" aria-label="Settings help">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+            </svg>
+          </md-icon-button>
+        </div>
         <md-outlined-text-field label="Export path" id="input-export-path" required></md-outlined-text-field>
         <md-outlined-text-field label="Max files" id="input-max-logs" type="number" min="1" max="100" required></md-outlined-text-field>
         <md-outlined-text-field label="Auto-delete after (days)" id="input-prune-days" type="number" min="0" max="365" required></md-outlined-text-field>
@@ -37,7 +44,13 @@
         </div>
 
         <div class="chip-field">
-          <span class="chip-label">Buffers</span>
+          <span class="chip-label">Buffers
+            <md-icon-button class="section-help-btn" data-help="buffers" aria-label="Buffers help">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+              </svg>
+            </md-icon-button>
+          </span>
           <md-chip-set id="chips-buffers">
             <md-filter-chip label="main"></md-filter-chip>
             <md-filter-chip label="system"></md-filter-chip>
@@ -104,6 +117,54 @@
     </div>
     <div slot="actions">
       <md-filled-button id="help-close">OK</md-filled-button>
+    </div>
+  </md-dialog>
+
+  <md-dialog id="settings-help">
+    <span slot="headline">Settings</span>
+    <div slot="content">
+      <dl class="help-definitions">
+        <dt>Export path</dt>
+        <dd>Directory where log tarballs are saved after each boot.</dd>
+        <dt>Max files</dt>
+        <dd>When exceeded, the oldest log files are deleted at boot time. For example, with a limit of 5, rebooting with 5 existing files deletes the oldest before saving the new one.</dd>
+        <dt>Auto-delete (days)</dt>
+        <dd>Log files older than this are automatically removed on boot. Set to 0 to keep files indefinitely.</dd>
+        <dt>Persistent logging</dt>
+        <dd>By default, log capture stops after the first unlock and logs are packaged immediately. Enable this to keep capturing in the background. Logs will be packaged on the next reboot instead.</dd>
+      </dl>
+    </div>
+    <div slot="actions">
+      <md-filled-button class="help-dialog-close">OK</md-filled-button>
+    </div>
+  </md-dialog>
+
+  <md-dialog id="buffers-help">
+    <span slot="headline">Buffers</span>
+    <div slot="content">
+      <dl class="help-definitions">
+        <dt>Main</dt>
+        <dd>App-level logging. Most app crashes and general debug output end up here.</dd>
+        <dt>System</dt>
+        <dd>System services like PackageManager and ActivityManager. Useful for diagnosing boot issues and service failures.</dd>
+        <dt>Crash</dt>
+        <dd>Crash traces and ANR (App Not Responding) reports. Captures full stack traces when apps or the system crash.
+          <p class="help-warning">Stack traces may contain auth tokens or credentials leaked by apps. Review before sharing.</p>
+        </dd>
+        <dt>Radio</dt>
+        <dd>Telephony, modem, and RIL messages. Useful for diagnosing signal or connectivity issues.
+          <p class="help-warning">Contains IMEI, phone numbers, and SIM identifiers. Disable before sharing logs publicly.</p>
+        </dd>
+        <dt>Events</dt>
+        <dd>Structured system events like battery stats, app usage, and thermal data. Mostly useful for advanced diagnostics.</dd>
+        <dt>Kernel</dt>
+        <dd>Kernel ring buffer (dmesg). Captures driver messages, hardware init, and low-level errors. Useful for diagnosing kernel panics, boot loops, and hardware failures.
+          <p class="help-note">Kernel messages are already captured separately via /proc/kmsg. Enabling this adds them to the logcat stream for a unified timeline.</p>
+        </dd>
+      </dl>
+    </div>
+    <div slot="actions">
+      <md-filled-button class="help-dialog-close">OK</md-filled-button>
     </div>
   </md-dialog>
 

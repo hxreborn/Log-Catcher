@@ -28,6 +28,7 @@ import {
     $,
     hideRefreshProgress,
     setVersion,
+    setupSectionHelp,
     showConfirm,
     showEmpty,
     showFiles,
@@ -188,6 +189,7 @@ const init = async (): Promise<void> => {
     populateSettings(currentSettings);
 
     $('btn-help').onclick = showHelp;
+    setupSectionHelp();
 
     $('settings-section').addEventListener('input', checkDirty);
     $('settings-section').addEventListener('change', checkDirty);

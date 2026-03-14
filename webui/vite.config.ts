@@ -30,6 +30,7 @@ export default defineConfig(({ mode }) => {
             port: parsePort(env.VITE_PORT, 5173),
             strictPort: true,
             open: parseBoolean(env.VITE_OPEN),
+            hmr: env.VITE_HOST === '0.0.0.0' ? { host: env.VITE_HMR_HOST || host } : undefined,
         },
         preview: {
             host,

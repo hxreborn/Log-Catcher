@@ -158,6 +158,12 @@ header > span {
   gap: 0.75rem;
 }
 
+.settings-group-header {
+  display: flex;
+  justify-content: flex-end;
+  margin: -0.5rem -0.5rem -0.25rem;
+}
+
 .settings-group md-outlined-text-field {
   display: block;
   width: 100%;
@@ -364,6 +370,54 @@ md-dialog [slot="headline"] {
 md-dialog [slot="content"],
 md-dialog [slot="content"] p {
   color: var(--on-surface-variant);
+}
+
+/* ===== Section help buttons ===== */
+
+.section-help-btn {
+  --md-icon-button-icon-size: 18px;
+  --md-icon-button-state-layer-height: 32px;
+  --md-icon-button-state-layer-width: 32px;
+  --md-icon-button-icon-color: var(--on-surface-variant);
+  vertical-align: middle;
+  margin-left: 0.25rem;
+}
+
+/* ===== Section help dialogs ===== */
+
+.help-definitions {
+  margin: 0;
+  padding: 0;
+}
+
+.help-definitions dt {
+  font: var(--label-l);
+  color: var(--on-surface);
+  margin-top: 0.75rem;
+}
+
+.help-definitions dt:first-child {
+  margin-top: 0;
+}
+
+.help-definitions dd {
+  font: var(--body-m);
+  color: var(--on-surface-variant);
+  margin-left: 0;
+  margin-top: 0.25rem;
+}
+
+.help-warning {
+  color: var(--error);
+  font: var(--label-m);
+  margin-top: 0.25rem;
+}
+
+.help-note {
+  color: var(--on-surface-variant);
+  font: var(--label-m);
+  font-style: italic;
+  margin-top: 0.25rem;
 }
 
 [hidden] {
