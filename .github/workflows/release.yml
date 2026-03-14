@@ -26,7 +26,7 @@ jobs:
       - name: Package module zip
         run: |
           id=$(grep '^id=' module.prop | cut -d= -f2)
-          zip -r "$id.zip" META-INF webroot *.prop *.sh
+          zip -r "$id.zip" META-INF webroot *.prop *.sh update.json
 
       - name: Create release
         env:
@@ -36,3 +36,24 @@ jobs:
           gh release create "${{ github.ref_name }}" "$id.zip" \
             --title "${{ github.ref_name }}" \
             --generate-notes
+
+      - name: Update update.json
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          id=$(grep '^id=' module.prop | cut -d= -f2)
+          version=$(grep '^version=' module.prop | cut -d= -f2)
+          versionCode=$(grep '^versionCode=' module.prop | cut -d= -f2)
+          cat > update.json <<EOF
+          {
+            "version": "$version",
+            "versionCode": $versionCode,
+            "zipUrl": "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/$id.zip",
+            "changelog": "https://raw.githubusercontent.com/${{ github.repository }}/master/README.md"
+          }
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add update.json
+          git commit -m "chore: update update.json for ${{ github.ref_name }}" || exit 0
+          git push origin HEAD:master
