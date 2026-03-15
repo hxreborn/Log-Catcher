@@ -1,6 +1,6 @@
 {
-  "version": "v23.1",
-  "versionCode": 2301,
-  "zipUrl": "https://github.com/hxreborn/Log-Catcher/releases/download/v23.1/hxr_logcat.zip",
-  "changelog": "https://raw.githubusercontent.com/hxreborn/Log-Catcher/master/README.md"
+  "version": "v23.2",
+  "versionCode": 2302,
+  "zipUrl": "https://github.com/hxreborn/Log-Catcher/releases/download/v23.2/hxr_logcat.zip",
+  "changelog": "https://raw.githubusercontent.com/hxreborn/Log-Catcher/master/CHANGELOG.md"
 }

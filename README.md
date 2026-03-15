@@ -4,15 +4,7 @@
 [![KernelSU](docs/assets/badges/kernelsu.svg)](https://kernelsu.org)
 [![APatch](docs/assets/badges/apatch.svg)](https://apatch.dev)
 
-Captures boot logs (logcat + kernel messages) during startup and stores `bootlog-*.tar.gz` archives at a configurable export path (`/sdcard/Download/` by default).
-
-## Features
-
-- Captures logcat and kernel messages from early boot
-- Archives logs as timestamped tarballs after unlock
-- Configurable buffers, export path, max files, and cleanup rules
-- Optional persistent logging past boot
-- KernelSU/APatch WebUI for on-device log management
+Captures logcat and kernel messages during startup and archives them as timestamped tarballs after unlock. Supports configurable buffers, export path, max files, cleanup rules, and optional persistent logging.
 
 ## Supported Root Managers
 
